@@ -28,6 +28,11 @@ namespace PingPong
             this.Bounds = Screen.PrimaryScreen.Bounds;
 
             gamePanel.Top = background.Bottom - (background.Bottom / 10);
+
+            loseLabel.Visible = false;
+            loseLabel.Left = (background.Width / 2) - (loseLabel.Width / 2);
+            loseLabel.Top = (background.Height / 2) - (loseLabel.Height / 2);
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -39,6 +44,18 @@ namespace PingPong
         {
             if (e.KeyCode == Keys.Escape)
                 this.Close();
+
+            if(e.KeyCode == Keys.R)
+            {
+                gameBall.Top = 50;
+                gameBall.Left = 70;
+                speed_vertical = 2;
+                score = 0;
+                loseLabel.Visible = false;
+                timer.Enabled = true;
+                result.Text = "Результат: 0";
+
+            }
         }
 
         private void timer_Tick(object sender, EventArgs e)
@@ -59,7 +76,11 @@ namespace PingPong
                 speed_vertical *= -1;
             
             if (gameBall.Bottom >= background.Bottom)
+            {
+                loseLabel.Visible = true;
                 timer.Enabled = false;
+            }
+                
 
             if(gameBall.Bottom >= gamePanel.Top && gameBall.Bottom <= gamePanel.Bottom 
                 && gameBall.Left >= gamePanel.Left && gameBall.Right <= gamePanel.Right)
@@ -68,6 +89,10 @@ namespace PingPong
                 speed_vertical += 3;
                 speed_vertical *= -1;
                 score += 1;
+                result.Text = "Результат: " + score.ToString();
+
+                Random randColor = new Random();
+                background.BackColor = Color.FromArgb(randColor.Next(150, 255), randColor.Next(150, 255), randColor.Next(150, 255));
             }
         }
     }
